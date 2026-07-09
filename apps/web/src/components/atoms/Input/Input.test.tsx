@@ -1,9 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { axe } from '../../../test/a11y'
 import { Input } from './Input'
 
 describe('Input', () => {
+  it('has no accessibility violations (WCAG 2.1 AA)', async () => {
+    const { container } = render(
+      <Input aria-label="usuario123" placeholder="usuario123" />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it('renders with a placeholder', () => {
     render(<Input placeholder="usuario123" />)
     expect(screen.getByPlaceholderText('usuario123')).toBeInTheDocument()

@@ -17,6 +17,7 @@ lerna-debug.log*
 
 # Local secrets / MCP config (contains tokens)
 claude.json
+.mcp.json
 
 # OS
 .DS_Store

@@ -1,9 +1,22 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { axe } from '../../../test/a11y'
 import { FormField } from './FormField'
 
 describe('FormField', () => {
+  it('has no accessibility violations (WCAG 2.1 AA)', async () => {
+    const { container } = render(<FormField label="Email ou usuário" name="email" />)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
+  it('has no accessibility violations when showing an error', async () => {
+    const { container } = render(
+      <FormField label="Senha" name="password" error="Campo obrigatório" />,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it('renders a labeled input', () => {
     render(<FormField label="Email ou usuário" name="email" />)
     expect(screen.getByLabelText('Email ou usuário')).toBeInTheDocument()

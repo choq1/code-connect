@@ -1,9 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { axe } from '../../../test/a11y'
 import { Button } from './Button'
 
 describe('Button', () => {
+  it('has no accessibility violations (WCAG 2.1 AA)', async () => {
+    const { container } = render(<Button>Login</Button>)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it('renders its children', () => {
     render(<Button>Login</Button>)
     expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()

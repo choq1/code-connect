@@ -17,7 +17,7 @@ Run from the repository root using the workspace-level scripts in `package.json`
 
 ```bash
 pnpm dev:web          # start the Vite dev server for web
-pnpm dev:api          # start the Nest dev server (watch mode) for api
+pnpm dev:api           # start the Nest dev server (watch mode) for api
 pnpm build:web        # tsc -b && vite build for web
 pnpm build:api        # nest build for api
 pnpm build            # build all workspace packages (pnpm -r build)
@@ -46,8 +46,18 @@ api Jest config (in `apps/api/package.json`) sets `rootDir: src` and matches `*.
 ## Frontend conventions (`apps/web`)
 
 - **Atomic Design**: components are organized by the atoms → molecules → organisms → templates → pages hierarchy. Place new components in the folder matching their level of composition (e.g. `src/components/atoms`, `src/components/molecules`, ...) rather than a flat `components/` dump. A component only belongs at a given level if it's composed exclusively of components at that level or below.
-- **Tailwind CSS** is the styling approach — use utility classes over hand-written CSS/CSS modules. Neither Tailwind nor a component-testing library is installed yet (the app is still at its Vite starter state per the section above), so the first component/PR that needs them must add and configure the tooling rather than assuming it's already wired up.
+- **Tailwind CSS** is the styling approach — use utility classes over hand-written CSS/CSS modules.
 - **Every component requires a test** covering its essential usage (the primary render path and its main interaction/prop variations) — not necessarily exhaustive edge-case coverage, but no component should ship untested. Colocate the test next to the component (e.g. `Button.tsx` + `Button.test.tsx`).
+
+### Colors
+
+- The project palette lives in `apps/web/src/index.css` as Tailwind v4 `@theme` custom properties (`--color-brand`, `--color-brand-dark`, `--color-bg`, `--color-card`, `--color-input`, `--color-text`, `--color-text-muted`, `--color-danger`), sourced from the Figma design tokens (Verde destaque, Verde petróleo, Grafite, Cinza Escuro, Cinza médio, Offwhite).
+- Never hardcode a hex value in a component's `className` (no `bg-[#171d1f]` or similar). If a design calls for a color not yet in the palette, add a new `--color-*` entry to the `@theme` block in `index.css` and consume it as a semantic Tailwind class (`bg-card`, `text-danger`, etc.) — don't reach for arbitrary-value or default Tailwind palette classes (`text-red-400`, `bg-gray-800`) as a substitute.
+
+### Font sizes
+
+- Don't use arbitrary pixel values (`text-[15px]`) — map the design's type spec to the closest size in Tailwind's default scale (`xs`=12, `sm`=14, `base`=16, `lg`=18, `xl`=20, `2xl`=24, `3xl`=30, ...) and use that utility class instead.
+- Current mapping from the Figma type scale: Label (12.5px) → `text-xs`, Paragraph Small (15px) → `text-sm`, Paragraph/Paragraph Semibold (18px) → `text-lg`, Paragraph Large (22px) → `text-xl`, Subtitle Large Semibold (31px) → `text-3xl`. Match font weight the same way (Figma "SemiBold" → `font-semibold`, not `font-bold`).
 
 ## Backend conventions (`apps/api`)
 

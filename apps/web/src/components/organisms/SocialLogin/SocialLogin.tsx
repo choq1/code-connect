@@ -6,12 +6,16 @@ interface SocialLoginProps {
   onGithubClick?: () => void
   onGoogleClick?: () => void
   signupHref?: string
+  promptText?: string
+  linkLabel?: string
 }
 
 export function SocialLogin({
   onGithubClick,
   onGoogleClick,
   signupHref = '/cadastro',
+  promptText = 'Ainda não tem conta?',
+  linkLabel = 'Crie seu cadastro!',
 }: SocialLoginProps) {
   return (
     <div className="flex flex-col gap-6">
@@ -22,10 +26,10 @@ export function SocialLogin({
         <SocialButton icon="/Google.png" label="Gmail" onClick={onGoogleClick} />
       </div>
 
-      <p className="text-center text-sm text-text">
-        Ainda não tem conta?{' '}
-        <Link href={signupHref} className="text-brand no-underline">
-          Crie seu cadastro!
+      <p className="text-center text-lg text-text">
+        {promptText}{' '}
+        <Link to={signupHref} className="text-brand no-underline">
+          {linkLabel}
         </Link>
       </p>
     </div>

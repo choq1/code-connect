@@ -14,7 +14,7 @@ export function FormField({ label, name, error, ...inputProps }: FormFieldProps)
       <Label htmlFor={name}>{label}</Label>
       <Input id={name} name={name} {...inputProps} />
       {error && (
-        <span role="alert" className="text-sm text-red-400">
+        <span role="alert" className="text-sm text-danger">
           {error}
         </span>
       )}

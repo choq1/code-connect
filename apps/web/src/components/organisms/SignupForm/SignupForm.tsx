@@ -2,34 +2,39 @@ import { useState, type FormEvent } from 'react'
 import { FormField } from '../../molecules/FormField/FormField'
 import { Checkbox } from '../../atoms/Checkbox/Checkbox'
 import { Label } from '../../atoms/Label/Label'
-import { Link } from '../../atoms/Link/Link'
 import { Button } from '../../atoms/Button/Button'
 
-export interface LoginFormValues {
-  identifier: string
+export interface SignupFormValues {
+  name: string
+  email: string
   password: string
   remember: boolean
 }
 
-interface LoginFormProps {
-  onSubmit?: (values: LoginFormValues) => void
+interface SignupFormProps {
+  onSubmit?: (values: SignupFormValues) => void
 }
 
 interface FormErrors {
-  identifier?: string
+  name?: string
+  email?: string
   password?: string
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
-  const [identifier, setIdentifier] = useState('')
+export function SignupForm({ onSubmit }: SignupFormProps) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(true)
   const [errors, setErrors] = useState<FormErrors>({})
 
   function validate(): FormErrors {
     const nextErrors: FormErrors = {}
-    if (!identifier.trim()) {
-      nextErrors.identifier = 'Informe seu email ou usuário'
+    if (!name.trim()) {
+      nextErrors.name = 'Informe seu nome completo'
+    }
+    if (!email.trim()) {
+      nextErrors.email = 'Informe seu email'
     }
     if (!password.trim()) {
       nextErrors.password = 'Informe sua senha'
@@ -43,19 +48,28 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     setErrors(nextErrors)
 
     if (Object.keys(nextErrors).length === 0) {
-      onSubmit?.({ identifier, password, remember })
+      onSubmit?.({ name, email, password, remember })
     }
   }
 
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
       <FormField
-        label="Email ou usuário"
-        name="identifier"
-        placeholder="usuario123"
-        value={identifier}
-        onChange={(event) => setIdentifier(event.target.value)}
-        error={errors.identifier}
+        label="Nome"
+        name="name"
+        placeholder="Nome completo"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        error={errors.name}
+      />
+      <FormField
+        label="Email"
+        name="email"
+        type="email"
+        placeholder="Digite seu email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        error={errors.email}
       />
       <FormField
         label="Senha"
@@ -67,23 +81,18 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         error={errors.password}
       />
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Checkbox
-            id="remember"
-            checked={remember}
-            onChange={(event) => setRemember(event.target.checked)}
-          />
-          <Label htmlFor="remember" className="cursor-pointer">
-            Lembrar-me
-          </Label>
-        </div>
-        <Link to="/recuperar-senha" className="text-lg">
-          Esqueci a senha
-        </Link>
+      <div className="flex items-center gap-2">
+        <Checkbox
+          id="remember"
+          checked={remember}
+          onChange={(event) => setRemember(event.target.checked)}
+        />
+        <Label htmlFor="remember" className="cursor-pointer">
+          Lembrar-me
+        </Label>
       </div>
 
-      <Button type="submit">Login →</Button>
+      <Button type="submit">Cadastrar →</Button>
     </form>
   )
 }

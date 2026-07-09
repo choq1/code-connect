@@ -8,10 +8,15 @@ export function LoginPage() {
   }
 
   return (
-    <AuthTemplate bannerSrc="/banner.png" bannerAlt="Code Connect">
+    <AuthTemplate
+      bannerSrc="/banner-login.jpg"
+      bannerAlt="Code Connect"
+      bannerWidth={814}
+      bannerHeight={1272}
+    >
       <div>
-        <h1 className="text-3xl font-bold text-text">Login</h1>
-        <p className="mt-2 text-text-muted">Boas-vindas! Faça seu login.</p>
+        <h1 className="text-3xl font-semibold text-text">Login</h1>
+        <p className="mt-2 text-xl text-text">Boas-vindas! Faça seu login.</p>
       </div>
 
       <LoginForm onSubmit={handleSubmit} />

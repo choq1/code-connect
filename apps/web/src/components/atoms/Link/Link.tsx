@@ -1,13 +1,14 @@
-import type { AnchorHTMLAttributes, ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { Link as RouterLink, type LinkProps as RouterLinkProps } from 'react-router-dom'
 
-interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+interface LinkProps extends Omit<RouterLinkProps, 'children'> {
   children: ReactNode
 }
 
 export function Link({ children, className = '', ...props }: LinkProps) {
   return (
-    <a className={`underline underline-offset-2 hover:opacity-80 ${className}`} {...props}>
+    <RouterLink className={`underline underline-offset-2 hover:opacity-80 ${className}`} {...props}>
       {children}
-    </a>
+    </RouterLink>
   )
 }

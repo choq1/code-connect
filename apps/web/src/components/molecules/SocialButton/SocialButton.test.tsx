@@ -1,9 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { axe } from '../../../test/a11y'
 import { SocialButton } from './SocialButton'
 
 describe('SocialButton', () => {
+  it('has no accessibility violations (WCAG 2.1 AA)', async () => {
+    const { container } = render(<SocialButton icon="/Github.png" label="Github" />)
+    expect(await axe(container)).toHaveNoViolations()
+  })
+
   it('renders the icon and label', () => {
     render(<SocialButton icon="/Github.png" label="Github" />)
 
