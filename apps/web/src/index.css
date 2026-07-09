@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand: #98e24c;
+  --color-brand-dark: #08060d;
+  --color-bg: #0a0a0b;
+  --color-card: #202024;
+  --color-input: #8a8a8a;
+  --color-text: #f3f4f6;
+  --color-text-muted: #9ca3af;
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+}
