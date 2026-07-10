@@ -38,4 +38,14 @@ describe('Button', () => {
     await user.click(screen.getByRole('button', { name: 'Login' }))
     expect(onClick).not.toHaveBeenCalled()
   })
+
+  it('is full width by default', () => {
+    render(<Button>Login</Button>)
+    expect(screen.getByRole('button', { name: 'Login' })).toHaveClass('w-full')
+  })
+
+  it('does not apply w-full when fullWidth is false', () => {
+    render(<Button fullWidth={false}>Sair</Button>)
+    expect(screen.getByRole('button', { name: 'Sair' })).not.toHaveClass('w-full')
+  })
 })

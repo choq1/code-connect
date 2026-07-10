@@ -51,9 +51,9 @@ export class AuthController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Não autenticado' })
-  me(@Req() request: Request): UserResponseDto {
+  async me(@Req() request: Request): Promise<UserResponseDto> {
     const payload = request['user'] as JwtPayload;
-    const user = this.usersService.findById(payload.sub);
+    const user = await this.usersService.findById(payload.sub);
 
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');

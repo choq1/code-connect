@@ -26,7 +26,7 @@ describe('AuthService', () => {
   });
 
   it('returns an access token for valid credentials', async () => {
-    usersService.findByEmail.mockReturnValue({
+    usersService.findByEmail.mockResolvedValue({
       id: '1',
       email: 'jane@example.com',
       passwordHash: await bcrypt.hash('strongPassword123', 10),
@@ -45,7 +45,7 @@ describe('AuthService', () => {
   });
 
   it('throws UnauthorizedException for an unknown email', async () => {
-    usersService.findByEmail.mockReturnValue(undefined);
+    usersService.findByEmail.mockResolvedValue(undefined);
 
     await expect(
       service.signIn('unknown@example.com', 'anyPassword'),
@@ -53,7 +53,7 @@ describe('AuthService', () => {
   });
 
   it('throws UnauthorizedException for a wrong password', async () => {
-    usersService.findByEmail.mockReturnValue({
+    usersService.findByEmail.mockResolvedValue({
       id: '1',
       email: 'jane@example.com',
       passwordHash: await bcrypt.hash('strongPassword123', 10),

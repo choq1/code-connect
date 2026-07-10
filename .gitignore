@@ -13,6 +13,8 @@ lerna-debug.log*
 # Env
 .env
 .env.local
+.env.*
+!.env.example
 *.local
 
 # Local secrets / MCP config (contains tokens)

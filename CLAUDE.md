@@ -11,6 +11,10 @@ This is a pnpm workspace monorepo (`pnpm-workspace.yaml`) with two apps under `a
 
 Both apps are currently at their framework-generated starter state (no custom domain logic yet), so don't assume existing conventions beyond what the starters provide — check the actual source before extending a pattern.
 
+## Planning conventions
+
+Whenever you produce an implementation plan (e.g. via plan mode) for work in this repo, save it as a markdown file under `plans/` at the repo root (e.g. `plans/login-page.md`), named for the feature it covers. This applies regardless of which chat/session the plan is produced in.
+
 ## Commands
 
 Run from the repository root using the workspace-level scripts in `package.json` (these shell out to `pnpm --filter <app>`):

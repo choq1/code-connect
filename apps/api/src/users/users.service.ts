@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { User } from './entities/user.entity';
@@ -9,31 +10,33 @@ const SALT_ROUNDS = 10;
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
   async create(dto: CreateUserDto): Promise<UserResponseDto> {
-    if (this.findByEmail(dto.email)) {
+    if (await this.findByEmail(dto.email)) {
       throw new ConflictException('Email já cadastrado');
     }
 
-    const user: User = {
-      id: randomUUID(),
+    const user = this.usersRepository.create({
       name: dto.name,
       email: dto.email,
       passwordHash: await bcrypt.hash(dto.password, SALT_ROUNDS),
-    };
+    });
 
-    this.users.push(user);
+    await this.usersRepository.save(user);
 
     return this.toResponseDto(user);
   }
 
-  findByEmail(email: string): User | undefined {
-    return this.users.find((user) => user.email === email);
+  findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ email });
   }
 
-  findById(id: string): User | undefined {
-    return this.users.find((user) => user.id === id);
+  findById(id: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id });
   }
 
   toResponseDto(user: User): UserResponseDto {

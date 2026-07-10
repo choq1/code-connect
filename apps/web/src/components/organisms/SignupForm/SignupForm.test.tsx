@@ -57,4 +57,16 @@ describe('SignupForm', () => {
       remember: true,
     })
   })
+
+  it('shows the submit error message when provided', () => {
+    render(<SignupForm submitError="Email já cadastrado" />)
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Email já cadastrado')
+  })
+
+  it('disables the submit button while submitting', () => {
+    render(<SignupForm isSubmitting />)
+
+    expect(screen.getByRole('button', { name: /cadastrando/i })).toBeDisabled()
+  })
 })

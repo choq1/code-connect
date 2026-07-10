@@ -41,7 +41,7 @@ describe('AuthController', () => {
     expect(authService.signIn).toHaveBeenCalledWith(dto.email, dto.password);
   });
 
-  it('returns the logged-in user data', () => {
+  it('returns the logged-in user data', async () => {
     const user = {
       id: '1',
       name: 'Jane Doe',
@@ -53,24 +53,24 @@ describe('AuthController', () => {
       name: 'Jane Doe',
       email: 'jane@example.com',
     };
-    usersService.findById.mockReturnValue(user);
+    usersService.findById.mockResolvedValue(user);
     usersService.toResponseDto.mockReturnValue(responseDto);
 
     const request = {
       user: { sub: '1', email: 'jane@example.com' },
     } as unknown as Request;
 
-    expect(controller.me(request)).toEqual(responseDto);
+    await expect(controller.me(request)).resolves.toEqual(responseDto);
     expect(usersService.findById).toHaveBeenCalledWith('1');
   });
 
-  it('throws NotFoundException when the user no longer exists', () => {
-    usersService.findById.mockReturnValue(undefined);
+  it('throws NotFoundException when the user no longer exists', async () => {
+    usersService.findById.mockResolvedValue(undefined);
 
     const request = {
       user: { sub: '1', email: 'jane@example.com' },
     } as unknown as Request;
 
-    expect(() => controller.me(request)).toThrow(NotFoundException);
+    await expect(controller.me(request)).rejects.toThrow(NotFoundException);
   });
 });

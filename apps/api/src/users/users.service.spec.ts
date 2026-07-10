@@ -1,13 +1,38 @@
 import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
+  let users: User[];
 
   beforeEach(async () => {
+    users = [];
+
+    const repositoryMock = {
+      create: jest.fn(
+        (data: Partial<User>) =>
+          ({ id: `${users.length + 1}`, ...data }) as User,
+      ),
+      save: jest.fn((user: User) => {
+        users.push(user);
+        return Promise.resolve(user);
+      }),
+      findOneBy: jest.fn(({ email, id }: { email?: string; id?: string }) => {
+        const found = users.find(
+          (user) => (email && user.email === email) || (id && user.id === id),
+        );
+        return Promise.resolve(found ?? null);
+      }),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
+      providers: [
+        UsersService,
+        { provide: getRepositoryToken(User), useValue: repositoryMock },
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
@@ -24,7 +49,7 @@ describe('UsersService', () => {
     expect(result.email).toBe('jane@example.com');
     expect(result.id).toEqual(expect.any(String));
 
-    const stored = service.findByEmail('jane@example.com');
+    const stored = await service.findByEmail('jane@example.com');
     expect(stored?.passwordHash).toBeDefined();
     expect(stored?.passwordHash).not.toBe('strongPassword123');
   });
@@ -52,6 +77,7 @@ describe('UsersService', () => {
       password: 'strongPassword123',
     });
 
-    expect(service.findById(created.id)?.email).toBe('jane@example.com');
+    const found = await service.findById(created.id);
+    expect(found?.email).toBe('jane@example.com');
   });
 });

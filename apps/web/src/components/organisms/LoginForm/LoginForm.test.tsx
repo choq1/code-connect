@@ -76,4 +76,24 @@ describe('LoginForm', () => {
       remember: true,
     })
   })
+
+  it('shows the submit error message when provided', () => {
+    render(
+      <MemoryRouter>
+        <LoginForm submitError="Credenciais inválidas" />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Credenciais inválidas')
+  })
+
+  it('disables the submit button while submitting', () => {
+    render(
+      <MemoryRouter>
+        <LoginForm isSubmitting />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: /entrando/i })).toBeDisabled()
+  })
 })

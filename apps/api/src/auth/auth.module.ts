@@ -5,6 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
+import { OptionalAuthGuard } from './optional-auth.guard';
 
 @Module({
   imports: [
@@ -15,7 +16,10 @@ import { jwtConstants } from './constants';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthGuard],
-  exports: [AuthService],
+  providers: [AuthService, AuthGuard, OptionalAuthGuard],
+  // JwtModule é reexportado para que outros módulos (ex.: PostsModule) que
+  // importam o AuthModule consigam instanciar AuthGuard/OptionalAuthGuard,
+  // que dependem de JwtService.
+  exports: [AuthService, AuthGuard, OptionalAuthGuard, JwtModule],
 })
 export class AuthModule {}

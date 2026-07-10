@@ -13,6 +13,8 @@ export interface LoginFormValues {
 
 interface LoginFormProps {
   onSubmit?: (values: LoginFormValues) => void
+  submitError?: string
+  isSubmitting?: boolean
 }
 
 interface FormErrors {
@@ -20,7 +22,7 @@ interface FormErrors {
   password?: string
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({ onSubmit, submitError, isSubmitting }: LoginFormProps) {
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(true)
@@ -83,7 +85,15 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </Link>
       </div>
 
-      <Button type="submit">Login →</Button>
+      {submitError && (
+        <span role="alert" className="text-sm text-danger">
+          {submitError}
+        </span>
+      )}
+
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Entrando...' : 'Login →'}
+      </Button>
     </form>
   )
 }

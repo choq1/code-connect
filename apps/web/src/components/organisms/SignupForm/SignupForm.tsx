@@ -13,6 +13,8 @@ export interface SignupFormValues {
 
 interface SignupFormProps {
   onSubmit?: (values: SignupFormValues) => void
+  submitError?: string
+  isSubmitting?: boolean
 }
 
 interface FormErrors {
@@ -21,7 +23,7 @@ interface FormErrors {
   password?: string
 }
 
-export function SignupForm({ onSubmit }: SignupFormProps) {
+export function SignupForm({ onSubmit, submitError, isSubmitting }: SignupFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -92,7 +94,15 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         </Label>
       </div>
 
-      <Button type="submit">Cadastrar →</Button>
+      {submitError && (
+        <span role="alert" className="text-sm text-danger">
+          {submitError}
+        </span>
+      )}
+
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Cadastrando...' : 'Cadastrar →'}
+      </Button>
     </form>
   )
 }
